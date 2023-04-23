@@ -1,9 +1,11 @@
 const express = require('express');
 const breads = express.Router();
+
 const Bread = require("../models/breads.js");
 //index - all
 breads.get('/', (req,res) =>{
-    res.send(Bread)
+    //res.send(Bread);
+    res.render('index');
 });
 //read 1
 breads.get("/:arrayIndex", (req, res)=> {
