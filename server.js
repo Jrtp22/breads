@@ -1,5 +1,7 @@
+//dependencies
 const express = require('express');
 const breads = require('./controllers/breads_controllers');
+const methodOverride = require('method-override')
 
 require('dotenv').config();
 const PORT = process.env.PORT;
@@ -12,6 +14,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'))
 
 //routes
 app.get("/", (req,res) => {
@@ -28,4 +31,4 @@ app.get("*", (req, res) => {
 // listen
 app.listen(PORT, () => {
     console.log('Listening on port', PORT);
-  });
+});

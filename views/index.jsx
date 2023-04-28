@@ -10,13 +10,13 @@ const Index = ({ breads }) => {
                     Add new bread
                 </a>
             </div>
-           <ul>
+            <ul>
                 {breads.map((bread, index) => (
                     <li key={index}>
                         <a href={`/breads/${index}`}>{bread.name}</a>
                     </li>
                 ))}
-           </ul>
+            </ul>
         </Default>
     )
 };

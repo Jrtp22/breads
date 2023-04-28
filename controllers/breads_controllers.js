@@ -20,6 +20,7 @@ breads.get("/:arrayIndex", (req, res)=> {
     if (Bread[arrayIndex]){
          res.render("show", {
         bread: Bread[arrayIndex],
+        index: arrayIndex,
     })
     }
    else {
@@ -44,6 +45,12 @@ breads.post("/", (req, res) => {
     Bread.push(newBread)
     res.redirect("/breads")
 })
+//delete
+breads.delete('/:arrayIndex', (req, res) => {
+    const arrayIndex = req.params.arrayIndex;
+    Bread.splice(arrayIndex, 1);
+    res.status(303).redirect("/breads")
+});
 
 //export
 module.exports = breads;
