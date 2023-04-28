@@ -14,18 +14,27 @@ breads.get("/new", (req, res) => {
     res.render("new");
 });
 
-//read 1
+// EDIT
+breads.get('/:arrayIndex/edit', (req, res) => {
+    res.render('edit', {
+        bread: Bread[req.params.arrayIndex],
+        index: req.params.arrayIndex
+    })
+})
+
+
+//read 1 - show
 breads.get("/:arrayIndex", (req, res)=> {
     const arrayIndex = req.params.arrayIndex;
     if (Bread[arrayIndex]){
-         res.render("show", {
+        res.render("show", {
         bread: Bread[arrayIndex],
         index: arrayIndex,
     })
     }
-   else {
+    else {
     res.send("404")
-   }
+}
 })
 
 //create
@@ -45,6 +54,26 @@ breads.post("/", (req, res) => {
     Bread.push(newBread)
     res.redirect("/breads")
 })
+
+//update
+
+breads.put('/:arrayIndex', (req, res) => {
+    const arrayIndex = req.params.arrayIndex;
+    let updatedBread = { ...req.body };
+    if (updatedBread.image === "") {
+        updatedBread.image = "https://images.unsplash.com/photo-15176864"
+    }
+    if (updatedBread.hasGluten ==="on"){
+        updatedBread.hasGluten = true;
+    } else if (updatedBread.hasGluten === "off"){
+        updatedBread.hasGluten = false;
+    } else {
+        console.error("Error: hasGluten value is:", updatedBread.hasGluten);
+    }
+    Bread[arrayIndex] = updatedBread;
+    res.redirect(`/breads/${arrayIndex}`)
+    
+});
 //delete
 breads.delete('/:arrayIndex', (req, res) => {
     const arrayIndex = req.params.arrayIndex;
