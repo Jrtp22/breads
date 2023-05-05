@@ -14,6 +14,10 @@ const breadSchema = new Schema({
     type: String,
     default: 'https://images.unsplash.com/photo-15955',
   },
+  baker: {
+    type: String,
+    enum: ['Rachel', 'Monica', 'Joey', 'Chandler', 'Ross', 'Phoebe'],
+  }
 });
 //create a model
 const Bread = mongoose.model('Bread', breadSchema);

@@ -16,6 +16,7 @@ const Show = ({ bread }) => {
                 }
             </p>
             <img width="480" src={bread.image} alt={bread.name}/>
+            <p>baked with love❤️ {bread.baker}</p>
             <li>
                 <a href="/breads">Go Home</a>
             </li>
