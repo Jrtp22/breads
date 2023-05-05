@@ -3,29 +3,54 @@ const breads = express.Router();
 
 const Bread = require("../models/breads.js");
 //index - all
-breads.get('/', (req,res) =>{
-    //res.send(Bread);
-    res.render('index', {
-        breads: Bread
+breads.get('/', (req, res) => {
+    Bread.find().then(foundBreads => {
+        res.render('index', {
+            breads: foundBreads,
+            title: "Breads",
+        })
+
     });
-});
+})
 
 breads.get("/new", (req, res) => {
     res.render("new");
+    {title: "New Bread"};
 });
 
 // EDIT
-breads.get('/:arrayIndex/edit', (req, res) => {
-    res.render('edit', {
-        bread: Bread[req.params.arrayIndex],
-        index: req.params.arrayIndex
-    })
+breads.get('/:id/edit', (req, res) => {
+    Bread.findById(req.params.id)
+        .then(foundBread => {
+            res.render('edit', {
+                bread: foundBread
+            })
+        })
 })
 
 
+
 //read 1 - show
-breads.get("/:arrayIndex", (req, res)=> {
-    const arrayIndex = req.params.arrayIndex;
+breads.get("/:id", (req, res)=> {
+    const id = req.params.id;
+    Bread.findById(id).then((foundBread) => {
+        if (foundBread === null) {
+            res.send("404 - Bread not found");
+        } else {
+        res.render("show", {
+            bread: foundBread,
+            index: id,
+        });
+        }
+    })
+    .catch((err) => {
+        res.send("500 - Server Error");
+    })
+});
+
+
+
+/*     const arrayIndex = req.params.arrayIndex;
     if (Bread[arrayIndex]){
         res.render("show", {
         bread: Bread[arrayIndex],
@@ -33,16 +58,15 @@ breads.get("/:arrayIndex", (req, res)=> {
     })
     }
     else {
-    res.send("404")
-}
-})
+    res.send("404") */
+
 
 //create
 breads.post("/", (req, res) => {
     let newBread = { ...req.body };
     if (newBread.image === "") {
-        newBread.image =
-            "https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"}
+        newBread.image = undefined;
+            }
     if (newBread.hasGluten ==="on"){
         newBread.hasGluten = true;
     } else if (newBread.hasGluten === "off"){
@@ -51,34 +75,38 @@ breads.post("/", (req, res) => {
     else {
         console.error("Error: hasGluten value is:", newBread.hasGluten);
     }
-    Bread.push(newBread)
-    res.redirect("/breads")
+    Bread.create(newBread);
+    res.redirect("/breads");
 })
 
 //update
 
-breads.put('/:arrayIndex', (req, res) => {
-    const arrayIndex = req.params.arrayIndex;
-    let updatedBread = { ...req.body };
-    if (updatedBread.image === "") {
-        updatedBread.image = "https://images.unsplash.com/photo-15176864"
+
+
+breads.put('/:id', (req, res) => {
+    const id = req.params.id;
+    let updateBread = { ...req.body };
+    if (updateBread.image === "") {
+        updateBread.image = "https://images.unsplash.com/photo-15176864"
     }
-    if (updatedBread.hasGluten ==="on"){
-        updatedBread.hasGluten = true;
-    } else if (updatedBread.hasGluten === "off"){
-        updatedBread.hasGluten = false;
+    if (updateBread.hasGluten ==="on"){
+        updateBread.hasGluten = true;
     } else {
-        console.error("Error: hasGluten value is:", updatedBread.hasGluten);
-    }
-    Bread[arrayIndex] = updatedBread;
-    res.redirect(`/breads/${arrayIndex}`)
-    
+        updateBread.hasGluten = false;}
+
+    Bread.findByIdAndUpdate(id, updateBread, { new: true })
+        .then(updatedBread => {
+            console.log(updatedBread)
+            res.redirect(`/breads/${id}`)
+        })
+
 });
 //delete
-breads.delete('/:arrayIndex', (req, res) => {
-    const arrayIndex = req.params.arrayIndex;
-    Bread.splice(arrayIndex, 1);
-    res.status(303).redirect("/breads")
+breads.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    Bread.findByIdAndDelete(id).then(deletedBread => {
+        res.redirect("/breads");
+    })
 });
 
 //export

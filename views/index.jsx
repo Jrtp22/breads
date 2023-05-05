@@ -1,9 +1,9 @@
 const React = require("react");
 const Default = require("./layouts/default")
 
-const Index = ({ breads }) => {
+const Index = ({ breads, title }) => {
     return (
-        <Default>
+        <Default title={title}>
             <h2>Index page</h2>
             <div className="newButton">
                 <a className="button" href="/breads/new">
@@ -11,9 +11,9 @@ const Index = ({ breads }) => {
                 </a>
             </div>
             <ul>
-                {breads.map((bread, index) => (
-                    <li key={index}>
-                        <a href={`/breads/${index}`}>{bread.name}</a>
+                {breads.map((bread, ) => (
+                    <li key={breads.id}>
+                        <a href={`/breads/${bread.id}`}>{bread.name}</a>
                     </li>
                 ))}
             </ul>
