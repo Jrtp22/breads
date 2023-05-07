@@ -23,33 +23,37 @@ breads.get("/new", (req, res) => {
 
 // EDIT
 breads.get('/:id/edit', (req, res) => {
-    Bread.findById(req.params.id)
-        .then(foundBread => {
-            res.render('edit', {
-                bread: foundBread
-            })
+    const id = req.params.id;
+    Baker.find()
+        .then(foundBakers => {
+            Bread.findById(id)
+                .then(foundBread => {
+                    res.render('edit', {
+                        bread: foundBread,
+                        bakers: foundBakers
+                    })
+                })
         })
+
 })
 
 
 
 //read 1 - show
-breads.get("/:id", (req, res)=> {
+breads.get("/:id", (req, res) => {
     const id = req.params.id;
-    Bread.findById(id).then((foundBread) => {
-        if (foundBread === null) {
-            res.send("404 - Bread not found");
-        } else {
-            console.log(foundBread.getBakedBy()); 
-        res.render("show", {
-            bread: foundBread,
-            index: id,
+    Bread.findById(id)
+        .populate("baker")
+        .then((foundBread) => {
+            if (foundBread === null) {
+                res.send("404 - Bread not found");
+            } else {
+                console.log(foundBread.getBakedBy());
+                res.render("show", {
+                    bread: foundBread,
+                });
+            }
         });
-        }
-    })
-    .catch((err) => {
-        res.send("500 - Server Error");
-    })
 });
 
 
