@@ -15,8 +15,8 @@ const breadSchema = new Schema({
     default: 'https://images.unsplash.com/photo-15955',
   },
   baker: {
-    type: String,
-    enum: ['Rachel', 'Monica', 'Joey', 'Chandler', 'Ross', 'Phoebe'],
+    type: Schema.Types.ObjectId,
+    ref: "Baker",
   }
 });
 

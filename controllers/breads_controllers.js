@@ -2,6 +2,7 @@ const express = require('express');
 const breads = express.Router();
 
 const Bread = require("../models/breads.js");
+const Baker = require("../models/baker.js");
 //index - all
 breads.get('/', (req, res) => {
     Bread.find().then(foundBreads => {
@@ -14,8 +15,10 @@ breads.get('/', (req, res) => {
 })
 
 breads.get("/new", (req, res) => {
-    res.render("new");
-    {title: "New Bread"};
+    Baker.find().then(foundBakers => {
+    res.render("new", { title: "New Bread", bakers: foundBakers});
+    
+    });
 });
 
 // EDIT
