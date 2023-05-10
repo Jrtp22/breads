@@ -1,5 +1,6 @@
 //import mongoose
 const mongoose = require('mongoose');
+mongoose.set('strictQuery', true);
 //create a shorthand schema constructor
 const { Schema } = mongoose;
 
