@@ -4,8 +4,21 @@ const breads = express.Router();
 const Bread = require("../models/breads.js");
 const Baker = require("../models/baker.js");
 //index - all
-breads.get('/', (req, res) => {
-    Baker.find().then(foundBakers => {
+breads.get('/', async (req, res) => {
+    const foundBreads = await Bread.find().limit(10).lean();
+    const foundBakers = await Baker.find().lean(); //lean removes all the data from the database so  .id wont work you have to use ._id
+    res.render('index', {
+        bakers: foundBakers,
+        breads: foundBreads,
+        title: "Breads",
+/*         pagination: {
+            page: 1,
+            pages: 10,
+            next page: 2,
+        } */
+    }) 
+
+/*     Baker.find().then(foundBakers => {
     Bread.find().then(foundBreads => {
         res.render('index', {
             bakers: foundBakers,
@@ -13,7 +26,7 @@ breads.get('/', (req, res) => {
             title: "Breads",
         })
     })
-    });
+    }); */
 })
 
 breads.get("/new", (req, res) => {

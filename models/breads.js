@@ -1,41 +1,41 @@
 //import mongoose
-const mongoose = require('mongoose');
-mongoose.set('strictQuery', true);
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
 //create a shorthand schema constructor
 const { Schema } = mongoose;
 
 //create a schema
 const breadSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  hasGluten: { type: Boolean },
-  image: {
-    type: String,
-    default: 'https://images.unsplash.com/photo-15955',
-  },
-  baker: {
-    type: Schema.Types.ObjectId,
-    ref: "Baker",
-  }
+    name: {
+        type: String,
+        required: true,
+    },
+    hasGluten: { type: Boolean },
+    image: {
+        type: String,
+        default: "https://images.unsplash.com/photo-15955",
+    },
+    baker: {
+        type: Schema.Types.ObjectId,
+        ref: "Baker",
+    },
 });
 
 //helper methods
 breadSchema.methods.getBakedBy = function () {
-  let bakedByMessage = `${this.name} bread was baked with ♥️ by `;
-  if (this.baker && this.baker.name && this.baker.startDate) {
-      bakedByMessage +=
-          `${this.baker.name}, ` +
-          `who has been with us since ${this.baker.startDate.getFullYear()}.`;
-  } else {
-      bakedByMessage += "an unknown baker";
-  }
-  return bakedByMessage;
+    let bakedByMessage = `${this.name} bread was baked with ♥️ by `;
+    if (this.baker && this.baker.name && this.baker.startDate) {
+        bakedByMessage +=
+            `${this.baker.name}, ` +
+            `who has been with us since ${this.baker.startDate.getFullYear()}.`;
+    } else {
+        bakedByMessage += "an unknown baker";
+    }
+    return bakedByMessage;
 };
 
 //create a model
-const Bread = mongoose.model('Bread', breadSchema);
+const Bread = mongoose.model("Bread", breadSchema);
 
 //export the model
 

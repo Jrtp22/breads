@@ -6,7 +6,7 @@ const bakers = express.Router();
 
 //one time baker seed data
 bakers.get("/data/seed", (req, res) => {
-    //Baker.insertMany(bakerSeedData).then(
+    //Baker.insertMany(bakerSeedData).then
         res.redirect('/breads')
 })
 
@@ -21,7 +21,10 @@ bakers.get("/", (req, res) => {
 //detail - show page
 bakers.get("/:id", (req, res) => {
     Baker.findById(req.params.id)
-    .populate('breads')
+    .populate({
+        path : 'breads',
+        options : {limit : 2, skip : 1}
+    })
     .then((foundBaker) => {
         res.render('bakerShow', { baker: foundBaker });
     })
